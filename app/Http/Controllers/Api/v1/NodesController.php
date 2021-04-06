@@ -14,11 +14,11 @@ class NodesController extends Controller
     {
        
         if($type == "children"){
-            $node = Node::with(['childs_recursive'])->findOrFail($id);
-        }
-
-        if($type == "parents"){
-            $node = Node::with(['parents_recursive'])->findOrFail($id);
+            $node = Node::with(['childs_recursive'])->where('id',$id)->paginate();
+        }elseif($type == "parents"){
+            $node = Node::with(['parents_recursive'])->where('id',$id)->paginate(); //findOrFail($id)
+        }else{
+            return response()->json(['message' => 'Type not found'], 404);
         }
 
         return new NodeResource($node);
